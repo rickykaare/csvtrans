@@ -1,7 +1,7 @@
 # csvtrans
-_Tool for building translations from CSV input_
+_Tool for building translations from Google Sheet_
 
-The idea behind the tool is to read translations from a google sheet and output translations formatted as string resources for iOS or Android. 
+The idea behind the tool is to read translations from a Google Sheet and output them as string resources for iOS or Android. 
 
 ### CLI interface
 
