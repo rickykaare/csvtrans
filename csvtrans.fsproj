@@ -7,8 +7,9 @@
 
   <ItemGroup>
     <Compile Include="Model.fs" />
-    <Compile Include="Data.fs" />
     <Compile Include="Logic.fs" />
+    <Compile Include="IO.fs" />
+    <Compile Include="CliArguments.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

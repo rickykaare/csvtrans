@@ -1,22 +1,18 @@
 ﻿module Program
 
-open Model
-open Data
+open IO
 open Logic
 
 [<EntryPoint>]
 let main argv =
-    let options = CliArguments.Parse "csvtrans" argv
-    let format = getFormat options
-    let output = getWriter options
-    let t = getCsv options
-            |> Result.map id
-
-    getCsv options
-    |> function
-     | Ok data -> 
-         match data.Headers with
-         | Some h -> h |> parse format output data.Rows
-         | None -> eprintfn "ERROR: Specified input has no headers"
-     | Error e -> eprintfn "ERROR: %s" e
-    0
+  let logger = printfn "%s"
+  let options = CliArguments.Parse "csvtrans" argv
+  let format = getFormat options
+  let fileFormat = getFileFormat options
+  let writer = createFile logger options.BaseDir
+  let output = fileFormat writer
+  let csv = getCsv logger options
+  match csv.Headers with
+  | Some h -> parse format output csv.Rows h
+  | None -> eprintfn "ERROR: Specified input has no headers"
+  0   

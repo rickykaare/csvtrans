@@ -14,7 +14,7 @@ The idea behind the tool is to read translations from a Google Sheet and output 
                               use the specified Google Sheet as input.
         --url <url>           use an online cvs file as input.
         --file <path>         use a local csv file as input.
-        --format <ios|android>
+        --format <resx|ios|android>
                               specify the output translation format.
         --output <folder path>
                               specify the output folder
