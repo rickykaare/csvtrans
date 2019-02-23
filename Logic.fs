@@ -1,43 +1,80 @@
-module CsvTrans.Logic
+module Logic
 
+open System
+open System.Text
 open System.Web
 open FSharp.Data
 open Model
+open Resx.Resources
+open System.IO
 
 module Format =
-    let iOS lang tokens = 
-        let formatToken t = t.Value.Replace("\"", "\\\"") |> sprintf "\"%s\" = \"%s\"" t.Key
+    let private stringEncode (s:string) = s.Replace("\"", "\\\"")
+    let private xmlEncode = HttpUtility.HtmlEncode
+    let private indent i = sprintf "%s%s" (String.replicate i " ")
+
+    let Resx tokens =
+        let sb = StringBuilder ()
+        let writer = new ResXResourceWriter (new StringWriter (sb))
+        let createNode t = new ResXDataNode (t.Key,t.Value,null) 
         tokens 
-        |> Seq.map formatToken 
-        |> String.concat "\n" 
-        |> sprintf "Translating %s:\n%s\n" lang
+        |> Seq.map createNode
+        |> Seq.iter writer.AddResource
+        writer.Close ()
+        sb.ToString ()
 
-    let android lang tokens =
-        let formatToken t = HttpUtility.HtmlEncode t.Value |> sprintf "  <string name=\"%s\">%s</string>" t.Key
-        tokens 
-        |> Seq.map formatToken 
-        |> String.concat "\n" 
-        |> sprintf "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<resources>\n%s\n</resources>\n"
-        |> sprintf "Translating %s:\n%s" lang
+    let iOS tokens = 
+        let format token = 
+            sprintf "\"%s\" = \"%s\"" 
+                (stringEncode token.Key)
+                (stringEncode token.Value)
+        Seq.map format tokens |> String.concat "\n"
 
-let rec getFormat = 
-      function
-    | [] -> Format.iOS
-    | h::t -> 
-        match h with 
-        | Format Ios -> Format.iOS
-        | Format Android -> Format.android
-        | _ -> getFormat t
+    let Android tokens =
+        let header = [ "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+                       "<resources>" ]
+        let footer = [ "</resources>" ]
+        let format token = 
+            sprintf "<string name=\"%s\">%s</string>" 
+                (stringEncode token.Key)
+                (xmlEncode token.Value)
+            |> indent 4
+        tokens
+        |> Seq.map format
+        |> Seq.append header
+        |> Seq.append <| footer
+        |> String.concat "\n"
 
-let getLang (index:int) (rows:seq<CsvRow>) =
-    rows |> Seq.map (fun row -> { Key = row.[0]; Value = row.[index] })
+let rec getFormat = function
+    | [] -> Format.Resx
+    | (Format Ios)::_ -> Format.iOS
+    | (Format Android)::_ -> Format.Android
+    | (Format Resx)::_ -> Format.Resx
+    | _::t -> getFormat t
 
-let parse format rows =
-    let rec loop rows = 
-      function
-    | [] -> ()
-    | (i,h)::t -> 
-        rows |> getLang i |> format h |> printfn "%s"
-        loop rows t
+module Writer =
+    let Resx lang = 
+        printfn "Translating '%s' for Resx:\n%s\n" lang
+    let iOS lang = 
+        printfn "Translating '%s' for iOS:\n%s\n" lang
+    let Android lang = 
+        printfn "Translating '%s' for Android:\n%s\n" lang
+
+let rec getWriter = function
+    | [] -> Writer.Resx
+    | (Format Ios)::_ -> Writer.iOS
+    | (Format Android)::_ -> Writer.Android
+    | (Format Resx)::_ -> Writer.Resx
+    | _::t -> getWriter t
+
+let getTokens (keyColumn:int) (valueColumn:int) =
+    let token (r:CsvRow) = { Key = r.[keyColumn]; Value = r.[valueColumn] }
+    Seq.map token
+
+let parse format output rows =
+    let rec loop rows = function
+        | [] -> ()
+        | (i,h)::t -> 
+            rows |> getTokens 0 i |> format |> output h
+            loop rows t
     List.ofArray >> List.skip 1 >> List.indexed >> loop rows
-
