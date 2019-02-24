@@ -2,6 +2,10 @@
 _Tool for building translations from Google Sheet_
 
 The idea behind the tool is to read translations from a Google Sheet and output them as string resources for iOS or Android. 
+### Installation
+Tool can be installed using the command
+
+    dotnet tool install -g csvtrans
 
 ### CLI interface
 
