@@ -4,12 +4,14 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <Description>Tool for building translations from Google Sheet.</Description>
-    <VersionPrefix>0.9</VersionPrefix>
+    <VersionPrefix>0.9.1</VersionPrefix>
     <Authors>Ricky Kaare Engelharth</Authors>
     <Product>csvtrans</Product>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/rickykaare/csvtrans/blob/master/README.md</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/rickykaare/csvtrans.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <DebugType>embedded</DebugType>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
