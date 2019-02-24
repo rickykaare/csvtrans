@@ -5,26 +5,20 @@ type Token = {
   Value : string 
 }
 
-type Input =
-  | None
-  | Sheet of document:string*sheet:string
-  | Url of url:string
-  | File of path:string
-
 type OutputFormat =
   | Resx
   | Ios
   | Android 
 
 type Options = {
-  Input : Input
+  InputUrl : string
   Format : OutputFormat
-  BaseDir : string
+  OutputDir : string
 } 
 
 module Options = 
   let empty = {
-    Input = None
+    InputUrl = ""
     Format = Resx
-    BaseDir = "."
+    OutputDir = "."
   }

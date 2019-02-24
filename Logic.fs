@@ -1,9 +1,7 @@
 module Logic
 
-open System
 open System.IO
 open System.Text
-open System.Web
 open System.Xml
 open FSharp.Data
 open Resx.Resources
@@ -13,11 +11,14 @@ let getTokens (keyColumn:int) (valueColumn:int) =
   let token (r:CsvRow) = { Key = r.[keyColumn]; Value = r.[valueColumn] }
   Seq.map token
 
-let parse format output rows =
+let parse logger format output rows =
+  let logTokens h (tokens:seq<'a>) = 
+    logger <| sprintf "Processing %i tokens for language '%s'" (Seq.length tokens) h
+    tokens
   let rec loop rows = function
     | [] -> ()
     | (i,h)::t -> 
-        rows |> getTokens 0 i |> format |> output h
+        rows |> getTokens 0 i |> logTokens h |> format |> output h
         loop rows t
   Seq.indexed 
   >> Seq.filter (snd >> ((<>)"Key"))
@@ -27,22 +28,20 @@ let parse format output rows =
 
 module Format =
   let private stringEncode (s:string) = s.Replace("\"", "\\\"")
-  let private xmlEncode = HttpUtility.HtmlEncode
-  let private indent i = sprintf "%s%s" (String.replicate i " ")
-
+  
   let Resx tokens =
     let sb = StringBuilder ()
     use writer = new ResXResourceWriter (new StringWriter (sb))
-    let createNode t = new ResXDataNode (t.Key,t.Value,null) 
+    let createNode t = new ResXDataNode (t.Key,t.Value,null)
     tokens 
     |> Seq.map createNode
     |> Seq.iter writer.AddResource
     writer.Close ()
     sb.ToString ()
 
-  let Ios tokens = 
-    let format token = 
-      sprintf "\"%s\" = \"%s\"" 
+  let Ios tokens =
+    let format token =
+      sprintf "\"%s\" = \"%s\""
         (stringEncode token.Key)
         (stringEncode token.Value)
     Seq.map format tokens |> String.concat "\n"
@@ -68,14 +67,14 @@ let getFormat = function
   | { Format = Resx } -> Format.Resx
     
 module FileFormat =
-  let Resx writer lang = 
+  let Resx writer lang =
     let path = 
       match lang with
       | "Default" -> sprintf "Resources.resx"
       | s -> sprintf "Resources.%s.resx" s
     writer path
     
-  let Ios writer lang = 
+  let Ios writer lang =
     let path = 
       match lang with
       | "Default" -> sprintf "Base.lproj/Localizable.strings"
