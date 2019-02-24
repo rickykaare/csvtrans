@@ -6,6 +6,7 @@ type Token = {
 }
 
 type Input =
+  | None
   | Sheet of document:string*sheet:string
   | Url of url:string
   | File of path:string
@@ -23,7 +24,7 @@ type Options = {
 
 module Options = 
   let empty = {
-    Input = Input.File ""
+    Input = None
     Format = Resx
     BaseDir = "."
   }

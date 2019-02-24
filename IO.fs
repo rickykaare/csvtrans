@@ -8,6 +8,7 @@ let getUrl = sprintf "https://docs.google.com/spreadsheets/d/%s/gviz/tq?tqx=out:
 let cache (csv:CsvFile) = csv.Cache()
 let rec getCsv log options = 
   match options.Input with
+  | None -> failwith "No input specified."
   | Sheet (d,s) -> 
       let url = getUrl d s
       log <| sprintf "Downloading %s..." url

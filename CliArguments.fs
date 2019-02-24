@@ -8,8 +8,8 @@ type CliArguments =
   | Sheet of document_id:string*sheet_name:string
   | Url of url:string
   | File of path:string
-  | Format of OutputFormat
-  | Output of folder_path:string
+  | [<Mandatory>]Format of OutputFormat
+  | [<Mandatory>]Output of folder_path:string
 with 
   interface IArgParserTemplate with
     member s.Usage =
