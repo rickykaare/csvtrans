@@ -23,6 +23,7 @@ let parse logger format output rows =
   Seq.indexed 
   >> Seq.filter (snd >> ((<>)"Key"))
   >> Seq.filter (snd >> ((<>)"Comment"))
+  >> Seq.filter (snd >> ((<>)""))
   >> Seq.toList
   >> loop rows
 
