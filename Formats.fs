@@ -8,7 +8,7 @@ open Model
 
 module Apple =
   let private getPath = function
-    | "Default" -> sprintf "Base.lproj/Localizable.strings"
+    | Column.Default -> sprintf "Base.lproj/Localizable.strings"
     | s -> sprintf "%s.lproj/Localizable.strings" s
   let private stringEncode (str:string) = 
     str
@@ -31,7 +31,7 @@ module Apple =
 
 module Android =
   let private getPath = function
-    | "Default" -> sprintf "values/strings.xml"
+    | Column.Default -> sprintf "values/strings.xml"
     | s -> sprintf "values-%s/strings.xml" s
   let private stringEncode (str:string) = 
     str
@@ -65,7 +65,7 @@ module Android =
 
 module Resx =
   let private getPath = function
-    | "Default" -> sprintf "Resources.resx"
+    | Column.Default -> sprintf "Resources.resx"
     | s -> sprintf "Resources.%s.resx" s
   let private formatTokens tokens =
     let sb = StringBuilder ()

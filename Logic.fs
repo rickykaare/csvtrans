@@ -19,8 +19,8 @@ let processRows logger formatter headers rows =
         loop rows t
   headers
   |> Seq.indexed 
-  |> Seq.filter (snd >> ((<>)"Key"))
-  |> Seq.filter (snd >> ((<>)"Comment"))
+  |> Seq.filter (snd >> ((<>)Column.Key))
+  |> Seq.filter (snd >> ((<>)Column.Comment))
   |> Seq.filter (snd >> ((<>)""))
   |> Seq.toList
   |> loop rows

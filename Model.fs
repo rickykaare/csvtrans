@@ -1,5 +1,10 @@
 module Model
 
+module Column =
+  let [<Literal>] Key = "Key"
+  let [<Literal>] Default = "Default"
+  let [<Literal>] Comment = "Comment"
+
 type Token = { 
   Key : string
   Value : string 
