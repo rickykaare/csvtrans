@@ -2,13 +2,15 @@ module CliArguments
 
 open Argu
 open Model
+open System.Reflection
+open System
 
 [<Unique>] 
 type CliArguments =
-  | Sheet of document_id:string*sheet_name:string
-  | Csv of url_or_path:string
-  | [<Mandatory>]Format of OutputFormat
-  | [<Mandatory>]Output of folder_path:string
+  | [<AltCommandLine("-s")>]Sheet of document_id:string*sheet_name:string
+  | [<AltCommandLine("-c")>]Csv of url_or_path:string
+  | [<Mandatory;AltCommandLine("-f")>]Format of OutputFormat
+  | [<Mandatory;AltCommandLine("-o")>]Output of folder_path:string
 with 
   interface IArgParserTemplate with
     member s.Usage =

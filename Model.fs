@@ -6,9 +6,9 @@ type Token = {
 }
 
 type OutputFormat =
-  | Resx
-  | Ios
+  | Apple
   | Android 
+  | Resx
 
 type Options = {
   InputUrl : string

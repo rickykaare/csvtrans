@@ -34,16 +34,18 @@ Supported outputs are:
 
 ### CLI interface
 
-    USAGE: csvtrans [--help] [--sheet <document id> <sheet name>] [--csv <url or path>] --format <resx|ios|android>
+    USAGE: csvtrans [--help] [--sheet <document id> <sheet name>]
+                    [--csv <url or path>] --format <apple|android|resx>
                     --output <folder path>
 
     OPTIONS:
 
-        --sheet <document id> <sheet name>
-                              use the specified Google Sheet as input.
-        --csv <url or path>   use a cvs file as input.
-        --format <resx|ios|android>
-                              specify the output translation format.
-        --output <folder path>
-                              specify the output folder
+        --sheet, -s <document id> <sheet name>
+                            use the specified Google Sheet as input.
+        --csv, -c <url or path>
+                            use a cvs file as input.
+        --format, -f <apple|android|resx>
+                            specify the output translation format.
+        --output, -o <folder path>
+                            specify the output folder
         --help                display this list of options.

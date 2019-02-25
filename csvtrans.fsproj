@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <Description>Tool for building translations from Google Sheet.</Description>
-    <VersionPrefix>0.9.3</VersionPrefix>
+    <VersionPrefix>1.0</VersionPrefix>
     <Authors>Ricky Kaare Engelharth</Authors>
     <Product>csvtrans</Product>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <Compile Include="Model.fs" />
+    <Compile Include="Formats.fs" />
     <Compile Include="Logic.fs" />
     <Compile Include="IO.fs" />
     <Compile Include="CliArguments.fs" />

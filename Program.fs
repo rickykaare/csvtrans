@@ -7,15 +7,19 @@ open Logic
 let main argv =
   let options = CliArguments.Parse "csvtrans" argv
   let logger = printfn "%s"
-  let format = getFormat options
-  let output =  createFile logger options 
-                |> getFileFormat options               
+  let format = Formats.GetFormat options 
+  let writer = createFile logger options      
   let csv = getCsv logger options
+  
   match csv.Headers with
   | None -> eprintfn "ERROR: specified input has no headers."; exit 4
-  | Some h -> 
+  | Some headers -> 
     try
-      parse logger format output csv.Rows h
+      processRows 
+        logger 
+        (format writer)
+        headers
+        csv.Rows
     with e -> 
       eprintfn "ERROR: %s" e.Message; exit 4
   0
