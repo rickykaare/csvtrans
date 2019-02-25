@@ -2,13 +2,14 @@
 
 open IO
 open Logic
+open Formats
 
 [<EntryPoint>]
 let main argv =
   let options = CliArguments.Parse "csvtrans" argv
   let logger = printfn "%s"
-  let format = Formats.GetFormat options 
-  let writer = createFile logger options      
+  let format = getFormat options 
+  let writer = createFile logger options
   let csv = getCsv logger options
   
   match csv.Headers with

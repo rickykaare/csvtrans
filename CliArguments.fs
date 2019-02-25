@@ -2,8 +2,6 @@ module CliArguments
 
 open Argu
 open Model
-open System.Reflection
-open System
 
 [<Unique>] 
 type CliArguments =

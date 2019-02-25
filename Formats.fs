@@ -81,7 +81,7 @@ module Resx =
         (getPath lang)
         (formatTokens tokens)
 
-let GetFormat = function
+let getFormat = function
   | { Format = Apple } -> Apple.format
   | { Format = Android } -> Android.format
   | { Format = Resx } -> Resx.format
