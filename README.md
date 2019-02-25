@@ -13,7 +13,7 @@ The tool supports the following input sources:
 
 - A local CSV file
 - An online CSV source
-- A Google SHeet
+- A Google Sheet
 
 The column headers in the input identifies the target languages (e.g. en, en-US, da-DK etc.) with the following special columns:
 
@@ -28,7 +28,7 @@ An example sheet can be found here: [SampleTranslations](https://docs.google.com
 ### Output
 Supported outputs are:
 
-- Apple String resources (iOS)
+- Apple string resources (iOS)
 - Android string resources
 - Resx resources
 
