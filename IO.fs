@@ -5,17 +5,17 @@ open FSharp.Data
 open Model
 
 let getCsv log options =
-  let cache (c:CsvFile) = c.Cache () 
+  let cache (c:CsvFile) = c.Cache ()
   log <| sprintf "Loading %s" options.InputUrl
   options.InputUrl
   |> CsvFile.Load
   |> cache
 
-let createFile log options path contents =
-  let fullPath = Path.Combine (options.OutputDir,path)
+let createFile log options file =
+  let fullPath = Path.Combine (options.OutputDir,file.Path)
   let dir = Path.GetDirectoryName fullPath
   if not <| Directory.Exists dir then do 
     log <| sprintf "Creating folder '%s'" dir
     Directory.CreateDirectory dir |> ignore
-  log <| sprintf "Writing file '%s'" path
-  File.WriteAllText (fullPath, contents)
+  log <| sprintf "Writing file '%s'" file.Path
+  File.WriteAllText (fullPath, file.Contents)

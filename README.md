@@ -36,16 +36,17 @@ Supported outputs are:
 
     USAGE: csvtrans [--help] [--sheet <document id> <sheet name>]
                     [--csv <url or path>] --format <apple|android|resx>
-                    --output <folder path>
+                    --outputdir <directory path> [--name <string>]
 
     OPTIONS:
 
         --sheet, -s <document id> <sheet name>
-                            use the specified Google Sheet as input.
+                            specify a Google Sheet as input.
         --csv, -c <url or path>
-                            use a cvs file as input.
+                            specify a online or local cvs file as input.
         --format, -f <apple|android|resx>
-                            specify the output translation format.
-        --output, -o <folder path>
-                            specify the output folder
+                            specify the output format.
+        --outputdir, -o <directory path>
+                            specify the output directory.
+        --name, -n <string>   specify an optional name for the output.
         --help                display this list of options.

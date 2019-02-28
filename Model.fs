@@ -10,6 +10,11 @@ type Token = {
   Value : string 
 }
 
+type LanguageFile = {
+  Path : string
+  Contents : string
+}
+
 type OutputFormat =
   | Apple
   | Android 
@@ -19,6 +24,7 @@ type Options = {
   InputUrl : string
   Format : OutputFormat
   OutputDir : string
+  Name : string option
 } 
 
 module Options = 
@@ -26,4 +32,5 @@ module Options =
     InputUrl = ""
     Format = Resx
     OutputDir = "."
+    Name = None
   }

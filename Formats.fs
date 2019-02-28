@@ -7,9 +7,11 @@ open Resx.Resources
 open Model
 
 module Apple =
-  let private getPath = function
-    | Column.Default -> sprintf "Base.lproj/Localizable.strings"
-    | s -> sprintf "%s.lproj/Localizable.strings" s
+  let private getPath name lang = 
+    Option.defaultValue "Localizable" name
+    |> match lang with
+        | Column.Default -> sprintf "Base.lproj/%s.strings"
+        | s -> sprintf "%s.lproj/%s.strings" s
   let private stringEncode (str:string) = 
     str
       .Replace("\\", "\\\\")
@@ -24,15 +26,17 @@ module Apple =
     tokens
     |> Seq.map createLine
     |> String.concat "\n"
-  let format writer lang tokens =
-    writer
-      (getPath lang) 
-      (formatTokens tokens)
+  let format name lang tokens = {
+      Path = (getPath name lang) 
+      Contents = (formatTokens tokens)
+  }
 
 module Android =
-  let private getPath = function
-    | Column.Default -> sprintf "values/strings.xml"
-    | s -> sprintf "values-%s/strings.xml" s
+  let private getPath name lang = 
+    Option.defaultValue "strings" name
+    |> match lang with
+        | Column.Default -> sprintf "values/%s.xml"
+        | s -> sprintf "values-%s/%s.xml" s
   let private stringEncode (str:string) = 
     str
       .Replace("\\", "\\\\")
@@ -58,15 +62,17 @@ module Android =
     xml.WriteEndDocument ()
     xml.Close ()
     sb.ToString ()
-  let format writer lang tokens =
-    writer
-      (getPath lang) 
-      (formatTokens tokens)
+  let format name lang tokens ={
+    Path = (getPath name lang) 
+    Contents = (formatTokens tokens)
+  }
 
 module Resx =
-  let private getPath = function
-    | Column.Default -> sprintf "Resources.resx"
-    | s -> sprintf "Resources.%s.resx" s
+  let private getPath name lang = 
+    Option.defaultValue "Resources" name
+    |> match lang with
+        | Column.Default -> sprintf "%s.resx"
+        | s -> (fun f -> sprintf "%s.%s.resx" f s)
   let private formatTokens tokens =
     let sb = StringBuilder ()
     use writer = new ResXResourceWriter (new StringWriter (sb))
@@ -76,12 +82,12 @@ module Resx =
     |> Seq.iter writer.AddResource
     writer.Close ()
     sb.ToString ()
-  let format writer lang tokens =
-    writer
-        (getPath lang)
-        (formatTokens tokens)
+  let format name lang tokens = {
+    Path = (getPath name lang)
+    Contents = (formatTokens tokens)
+  }
 
 let getFormat = function
-  | { Format = Apple } -> Apple.format
-  | { Format = Android } -> Android.format
-  | { Format = Resx } -> Resx.format
+  | { Format = Apple; Name = n } -> Apple.format n
+  | { Format = Android; Name = n } -> Android.format n
+  | { Format = Resx; Name = n } -> Resx.format n
