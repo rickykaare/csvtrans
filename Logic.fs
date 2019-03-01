@@ -4,8 +4,16 @@ open FSharp.Data
 open FSharp.Data.Runtime
 open Model
 
-let private getTokens (keyColumn:int) (valueColumn:int) =
-    let token (r:CsvRow) = { Key = r.[keyColumn]; Value = r.[valueColumn] }
+let private getTokens (keyColumn:int) (commentColumn:int option) (valueColumn:int) =
+    let getComment (r:CsvRow) = 
+      match commentColumn with
+      | Some c -> r.[c] |> Some
+      | None -> None
+    let token (r:CsvRow) = { 
+      Key = r.[keyColumn]
+      Value = r.[valueColumn]
+      Comment = (getComment r)
+    }
     Seq.map token 
     >> Seq.where (fun t-> t.Key <> "")
     >> Seq.where (fun t-> t.Value <> "")
@@ -15,11 +23,13 @@ let private logTokens log h (tokens:seq<'a>) =
     tokens
 
 let processRows logger format writer headers rows =  
+  let keyColumn = headers |> Seq.findIndex ((=)Column.Key)
+  let CommentColumn = headers |> Seq.tryFindIndex ((=)Column.Comment)
   let rec loop rows = function
     | [] -> ()
     | (i,h)::t -> 
         rows 
-        |> getTokens 0 i 
+        |> getTokens keyColumn CommentColumn i 
         |> logTokens logger h 
         |> format h 
         |> writer

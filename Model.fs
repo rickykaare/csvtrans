@@ -8,6 +8,7 @@ module Column =
 type Token = { 
   Key : string
   Value : string 
+  Comment : string option
 }
 
 type LanguageFile = {

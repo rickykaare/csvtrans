@@ -76,7 +76,11 @@ module Resx =
   let private formatTokens tokens =
     let sb = StringBuilder ()
     use writer = new ResXResourceWriter (new StringWriter (sb))
-    let createNode t = new ResXDataNode (t.Key,t.Value,null)
+    let createNode t = 
+      let node = new ResXDataNode (t.Key,t.Value,null)
+      match (t.Comment) with
+      | Some c -> node.Comment <- c; node
+      | None -> node
     tokens 
     |> Seq.map createNode
     |> Seq.iter writer.AddResource
