@@ -43,15 +43,14 @@ module Android =
       .Replace("\n", "\\n")
       .Replace("@", "\\@")
       .Replace("?","\\?")
-      .Replace("&","&amp;")
-      .Replace("<","&lt;")
-      .Replace(">","&gt;")
-      .Replace("'","&apos;")
-      .Replace("\"","&quot;") 
+      .Replace("'","\\'")
+      .Replace("\"","\\\"") 
   let private formatTokens tokens =
-    let sb = StringBuilder ()
-    use xml = new XmlTextWriter (new StringWriter (sb))
-    xml.Formatting <- Formatting.Indented
+    let settings = XmlWriterSettings ()
+    settings.Indent <- true
+    settings.Encoding <- UTF8Encoding false
+    use output = new MemoryStream()
+    use xml = XmlTextWriter.Create (output,settings)
     xml.WriteStartDocument ()
     xml.WriteStartElement "resources"
     for token in tokens do
@@ -61,7 +60,7 @@ module Android =
       xml.WriteEndElement ()
     xml.WriteEndDocument ()
     xml.Close ()
-    sb.ToString ()
+    Encoding.Default.GetString (output.ToArray())
   let format name lang tokens ={
     Path = (getPath name lang) 
     Contents = (formatTokens tokens)
