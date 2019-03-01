@@ -7,8 +7,8 @@ open Model
 type CliArguments =
   | [<AltCommandLine("-s")>]Sheet of document_id:string*sheet_name:string
   | [<AltCommandLine("-c")>]Csv of url_or_path:string
-  | [<Mandatory;AltCommandLine("-f")>]Format of OutputFormat
-  | [<Mandatory;AltCommandLine("-o")>]OutputDir of directory_path:string
+  | [<AltCommandLine("-f")>]Format of OutputFormat
+  | [<AltCommandLine("-o")>]OutputDir of directory_path:string
   | [<AltCommandLine("-n")>]Name of string
   | [<Hidden>]Output of folder_path:string
 with 
