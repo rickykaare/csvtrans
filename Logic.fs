@@ -6,7 +6,9 @@ open Model
 
 let private getTokens (keyColumn:int) (valueColumn:int) =
     let token (r:CsvRow) = { Key = r.[keyColumn]; Value = r.[valueColumn] }
-    Seq.map token
+    Seq.map token 
+    >> Seq.where (fun t-> t.Key <> "")
+    >> Seq.where (fun t-> t.Value <> "")
 
 let private logTokens log h (tokens:seq<'a>) = 
     log <| sprintf "Processing %i tokens for language '%s'" (Seq.length tokens) h
