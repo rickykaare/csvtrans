@@ -1,5 +1,7 @@
 module Model
 
+open System.Text.RegularExpressions
+
 module Column =
   let [<Literal>] Key = "Key"
   let [<Literal>] Default = "Default"
@@ -26,6 +28,7 @@ type Options = {
   Format : OutputFormat
   OutputDir : string
   Name : string option
+  Placeholders : Regex option
 } 
 
 module Options = 
@@ -34,4 +37,5 @@ module Options =
     Format = Resx
     OutputDir = "."
     Name = None
+    Placeholders = None
   }

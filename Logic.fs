@@ -24,12 +24,12 @@ let private logTokens log h (tokens:seq<'a>) =
 
 let processRows logger format writer headers rows =  
   let keyColumn = headers |> Seq.findIndex ((=)Column.Key)
-  let CommentColumn = headers |> Seq.tryFindIndex ((=)Column.Comment)
+  let commentColumn = headers |> Seq.tryFindIndex ((=)Column.Comment)
   let rec loop rows = function
     | [] -> ()
     | (i,h)::t -> 
         rows 
-        |> getTokens keyColumn CommentColumn i 
+        |> getTokens keyColumn commentColumn i 
         |> logTokens logger h 
         |> format h 
         |> writer

@@ -2,6 +2,7 @@ module CliArguments
 
 open Argu
 open Model
+open System.Text.RegularExpressions
 
 [<Unique>] 
 type CliArguments =
@@ -10,6 +11,7 @@ type CliArguments =
   | [<AltCommandLine("-f")>]Format of OutputFormat
   | [<AltCommandLine("-o")>]OutputDir of directory_path:string
   | [<AltCommandLine("-n")>]Name of string
+  | [<AltCommandLine("-p")>]Convert_Placeholders of regex_pattern:string
   | [<Hidden>]Output of folder_path:string
 with 
   interface IArgParserTemplate with
@@ -20,6 +22,7 @@ with
       | Format _ -> "specify the output format."
       | OutputDir _ -> "specify the output directory." 
       | Name _ -> "specify an optional name for the output."
+      | Convert_Placeholders _ -> "convert placeholders to match the output format."
       | Output _ -> ""
 
 let getSheetUrl (d,s) = sprintf "https://docs.google.com/spreadsheets/d/%s/gviz/tq?tqx=out:csv&sheet=%s&headers=0" d s
@@ -39,6 +42,7 @@ let Parse progName args =
     | Output p::t -> t |> loop {o with OutputDir = p }
     | OutputDir p::t -> t |> loop {o with OutputDir = p }
     | Name f::t -> t |> loop {o with Name = Some f }
+    | Convert_Placeholders p::t -> t |> loop {o with Placeholders = Regex p|> Some}
     | [] -> o
 
   parser.Parse args
