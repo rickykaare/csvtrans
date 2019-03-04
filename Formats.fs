@@ -7,7 +7,7 @@ open System.Xml
 open Resx.Resources
 open Model
 
-let convertph ph f s =
+let private convertph ph f s =
   match ph with
   | None -> s
   | Some (re:Regex) -> 
@@ -28,22 +28,22 @@ module Apple =
       .Replace("\t", "\\t")
       .Replace("\"", "\\\"")
 
-  let private formatTokens ph tokens = 
-    let createLine token =
+  let private formatPhrases ph phrases = 
+    let createLine phrase =
       let value = 
-        token.Value 
+        phrase.Value 
         |> convertph ph (fun _ -> "%@")
         |> stringEncode
       sprintf "\"%s\" = \"%s\";"
-        (stringEncode token.Key)
+        (stringEncode phrase.Key)
         (value)
-    tokens
+    phrases
     |> Seq.map createLine
     |> String.concat "\n"
 
-  let format name ph lang tokens = {
+  let format name ph lang phrases = {
       Path = (getPath name lang) 
-      Contents = (formatTokens ph tokens)
+      Contents = (formatPhrases ph phrases)
   }
 
 module Android =
@@ -62,7 +62,7 @@ module Android =
       .Replace("'","\\'")
       .Replace("\"","\\\"") 
 
-  let private formatTokens ph tokens =
+  let private formatPhrases ph phrases =
     let settings = XmlWriterSettings ()
     settings.Indent <- true
     settings.Encoding <- UTF8Encoding false
@@ -70,22 +70,22 @@ module Android =
     use xml = XmlTextWriter.Create (output,settings)
     xml.WriteStartDocument ()
     xml.WriteStartElement "resources"
-    for token in tokens do
+    for phrase in phrases do
       let value = 
-        token.Value
+        phrase.Value
         |> convertph ph (fun _ -> "%s")
         |> stringEncode
       xml.WriteStartElement "string"
-      xml.WriteAttributeString ("name",token.Key)
+      xml.WriteAttributeString ("name",phrase.Key)
       xml.WriteValue (value)
       xml.WriteEndElement ()
     xml.WriteEndDocument ()
     xml.Close ()
     Encoding.Default.GetString (output.ToArray())
   
-  let format name ph lang tokens ={
+  let format name ph lang phrases ={
     Path = (getPath name lang) 
-    Contents = (formatTokens ph tokens)
+    Contents = (formatPhrases ph phrases)
   }
 
 module Resx =
@@ -95,7 +95,7 @@ module Resx =
         | Column.Default -> sprintf "%s.resx"
         | s -> (fun f -> sprintf "%s.%s.resx" f s)
 
-  let private formatTokens ph tokens =
+  let private formatPhrases ph phrases =
     let sb = StringBuilder ()
     use writer = new ResXResourceWriter (new StringWriter (sb))
     let createNode t = 
@@ -104,18 +104,21 @@ module Resx =
       match (t.Comment) with
       | Some c -> node.Comment <- c; node
       | None -> node
-    tokens 
+    phrases 
     |> Seq.map createNode
     |> Seq.iter writer.AddResource
     writer.Close ()
     sb.ToString ()
 
-  let format name ph lang tokens = {
+  let format name ph lang phrases = {
     Path = (getPath name lang)
-    Contents = (formatTokens ph tokens)
+    Contents = (formatPhrases ph phrases)
   }
 
 let getFormat = function
-  | { Format = Apple; Name = n; Placeholders = ph } -> Apple.format n ph
-  | { Format = Android; Name = n; Placeholders = ph } -> Android.format n ph
-  | { Format = Resx; Name = n; Placeholders = ph } -> Resx.format n ph
+  | { Format = Apple; Name = n; Placeholders = ph } 
+    -> Apple.format n ph
+  | { Format = Android; Name = n; Placeholders = ph } 
+    -> Android.format n ph
+  | { Format = Resx; Name = n; Placeholders = ph } 
+    -> Resx.format n ph

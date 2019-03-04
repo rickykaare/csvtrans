@@ -4,23 +4,23 @@ open FSharp.Data
 open FSharp.Data.Runtime
 open Model
 
-let private getTokens (keyColumn:int) (commentColumn:int option) (valueColumn:int) =
+let private getPhrases (keyColumn:int) (commentColumn:int option) (valueColumn:int) =
     let getComment (r:CsvRow) = 
       match commentColumn with
       | Some c -> r.[c] |> Some
       | None -> None
-    let token (r:CsvRow) = { 
+    let phrase (r:CsvRow) = { 
       Key = r.[keyColumn]
       Value = r.[valueColumn]
       Comment = (getComment r)
     }
-    Seq.map token 
+    Seq.map phrase 
     >> Seq.where (fun t-> t.Key <> "")
     >> Seq.where (fun t-> t.Value <> "")
 
-let private logTokens log h (tokens:seq<'a>) = 
-    log <| sprintf "Processing %i tokens for language '%s'" (Seq.length tokens) h
-    tokens
+let private logPhrases log h (phrases:seq<'a>) = 
+    log <| sprintf "Processing %i phrases for language '%s'" (Seq.length phrases) h
+    phrases
 
 let processRows logger format writer headers rows =  
   let keyColumn = headers |> Seq.findIndex ((=)Column.Key)
@@ -29,8 +29,8 @@ let processRows logger format writer headers rows =
     | [] -> ()
     | (i,h)::t -> 
         rows 
-        |> getTokens keyColumn commentColumn i 
-        |> logTokens logger h 
+        |> getPhrases keyColumn commentColumn i 
+        |> logPhrases logger h 
         |> format h 
         |> writer
         loop rows t

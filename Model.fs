@@ -7,7 +7,7 @@ module Column =
   let [<Literal>] Default = "Default"
   let [<Literal>] Comment = "Comment"
 
-type Token = { 
+type Phrase = { 
   Key : string
   Value : string 
   Comment : string option

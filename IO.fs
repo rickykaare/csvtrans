@@ -15,7 +15,6 @@ let createFile log options file =
   let fullPath = Path.Combine (options.OutputDir,file.Path)
   let dir = Path.GetDirectoryName fullPath
   if not <| Directory.Exists dir then do 
-    log <| sprintf "Creating folder '%s'" dir
     Directory.CreateDirectory dir |> ignore
   log <| sprintf "Writing file '%s'" file.Path
   File.WriteAllText (fullPath, file.Contents)
