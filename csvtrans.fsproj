@@ -22,6 +22,9 @@
 
   <ItemGroup>
     <Compile Include="Model.fs" />
+    <Compile Include="Format.Android.fs" />
+    <Compile Include="Format.Apple.fs" />
+    <Compile Include="Format.Resx.fs" />
     <Compile Include="Formats.fs" />
     <Compile Include="Logic.fs" />
     <Compile Include="IO.fs" />
