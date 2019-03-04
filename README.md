@@ -35,8 +35,9 @@ Supported outputs are:
 ### CLI interface
 
     USAGE: csvtrans [--help] [--sheet <document id> <sheet name>]
-                    [--csv <url or path>] --format <apple|android|resx>
-                    --outputdir <directory path> [--name <string>]
+                    [--csv <url or path>] [--format <apple|android|resx>]
+                    [--outputdir <directory path>] [--name <string>]
+                    [--convert-placeholders <regex pattern>]
 
     OPTIONS:
 
@@ -49,4 +50,6 @@ Supported outputs are:
         --outputdir, -o <directory path>
                             specify the output directory.
         --name, -n <string>   specify an optional name for the output.
+        --convert-placeholders, -p <regex pattern>
+                            convert placeholders to match the output format.
         --help                display this list of options.
