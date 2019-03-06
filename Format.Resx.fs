@@ -1,5 +1,6 @@
 module Resx
 
+open System
 open System.IO
 open System.Text
 open Resx.Resources
@@ -13,7 +14,9 @@ let private getPath name lang =
 
 let private formatPhrases ph phrases =
   let sb = StringBuilder ()
-  use writer = new ResXResourceWriter (new StringWriter (sb))
+  let typeConverter (t:Type) = 
+    t.FullName.Replace("Resx.Resources.", "System.Resources.")
+  use writer = new ResXResourceWriter (new StringWriter (sb), typeConverter)
   let createNode t = 
     let value:string = t.Value |> ph (sprintf "{%i}")
     let node = ResXDataNode (t.Key,value,null)
