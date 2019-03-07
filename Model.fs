@@ -13,9 +13,10 @@ type Phrase = {
   Comment : string option
 }
 
-type LanguageFile = {
+type OutputFile = {
   Path : string
   Contents : string
+  Phrases : int
 }
 
 type OutputFormat =

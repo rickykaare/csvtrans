@@ -42,14 +42,14 @@ Supported outputs are:
     OPTIONS:
 
         --sheet, -s <document id> <sheet name>
-                            specify a Google Sheet as input.
+                              specify a Google Sheet as input.
         --csv, -c <url or path>
-                            specify a online or local cvs file as input.
+                              specify a online or local cvs file as input.
         --format, -f <apple|android|resx>
-                            specify the output format.
+                              specify the output format.
         --outputdir, -o <directory path>
-                            specify the output directory.
+                              specify the output directory.
         --name, -n <string>   specify an optional name for the output.
         --convert-placeholders, -p <regex pattern>
-                            convert placeholders to match the output format.
+                              convert placeholders to match the output format.
         --help                display this list of options.

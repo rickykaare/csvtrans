@@ -32,4 +32,5 @@ let private formatPhrases ph phrases =
 let format name ph lang phrases = {
   Path = (getPath name lang)
   Contents = (formatPhrases ph phrases)
+  Phrases = Seq.length phrases
 }

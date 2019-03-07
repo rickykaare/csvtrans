@@ -13,8 +13,7 @@ let main argv =
   
   try
     getCsv logger options
-    |> processCsv 
-          logger 
+    |> processCsv  
           format
           writer
   with e -> 

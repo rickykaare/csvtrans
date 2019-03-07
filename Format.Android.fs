@@ -21,7 +21,7 @@ let private stringEncode (str:string) =
     .Replace("\"","\\\"") 
 
 let private formatPhrases ph phrases =
-  let settings = XmlWriterSettings ()
+  let settings = XmlWriterSettings() 
   settings.Indent <- true
   settings.Encoding <- UTF8Encoding false
   use output = new MemoryStream()
@@ -44,4 +44,5 @@ let private formatPhrases ph phrases =
 let format name ph lang phrases = {
   Path = (getPath name lang) 
   Contents = (formatPhrases ph phrases)
+  Phrases = Seq.length phrases
 }

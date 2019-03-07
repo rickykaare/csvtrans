@@ -17,13 +17,9 @@ let private stringEncode (str:string) =
 
 let private formatPhrases ph phrases = 
   let createLine phrase =
-    let value = 
-      phrase.Value 
-      |> ph (fun _ -> "%@")
-      |> stringEncode
     sprintf "\"%s\" = \"%s\";"
       (stringEncode phrase.Key)
-      (value)
+      (phrase.Value |> ph (fun _ -> "%@") |> stringEncode)
   phrases
   |> Seq.map createLine
   |> String.concat "\n"
@@ -31,4 +27,5 @@ let private formatPhrases ph phrases =
 let format name ph lang phrases = {
     Path = (getPath name lang) 
     Contents = (formatPhrases ph phrases)
+    Phrases = Seq.length phrases
 }
