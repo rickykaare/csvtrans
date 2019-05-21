@@ -1,6 +1,8 @@
 # csvtrans
 _Tool for building translations from Google Sheet_
 
+[![Build Status](https://dev.azure.com/rickykaare/csvtrans/_apis/build/status/csvtrans-ci?branchName=master)](https://dev.azure.com/rickykaare/csvtrans/_build/latest?definitionId=2&branchName=master)
+
 The idea behind the tool is to read translations from a Google Sheet and output them as string resources for iOS or Android. 
 
 ### Installation
