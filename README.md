@@ -32,6 +32,7 @@ Supported outputs are:
 
 - Apple string resources (iOS)
 - Android string resources
+- Json dictionary
 - Resx resources
 
 ### CLI interface

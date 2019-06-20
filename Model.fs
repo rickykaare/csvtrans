@@ -22,6 +22,7 @@ type OutputFile = {
 type OutputFormat =
   | Apple
   | Android 
+  | Json 
   | Resx
 
 type Options = {

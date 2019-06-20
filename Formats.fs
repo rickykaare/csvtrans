@@ -15,5 +15,7 @@ let getFormat = function
     -> Apple.format n (convert ph)
   | { Format = Android; Name = n; Placeholders = ph } 
     -> Android.format n (convert ph)
+  | { Format = Json; Name = n; Placeholders = ph } 
+    -> Json.format n (convert ph)
   | { Format = Resx; Name = n; Placeholders = ph } 
     -> Resx.format n (convert ph)
